@@ -32,18 +32,22 @@ public class BoardDAO extends DBConnPool {
 		return totalCount;
 	}
 
-	public List<BoardDTO> selectList(Map<String, Object> map) {
+	public List<BoardDTO> selectListPage(Map<String, Object> map) {
 		List<BoardDTO> bbs = new Vector<>();
 
-		String query = "SELECT * FROM board";
+		String query = "SELECT * FROM"
+					+ "(SELECT Tb.*, ROWNUM rNum  FROM "
+					+ "(SELECT * FROM board";
 		if (map.get("searchWord") != null) {
 			query += " WHERE " + map.get("searchField") + " LIKE '%" + map.get("searchWord") + "%'";
 		}
-		query += " ORDER BY NUM DESC";
+		query += " ORDER BY NUM DESC) Tb) WHERE rNum BETWEEN ? AND ?";
 
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery(query);
+			psmt = con.prepareStatement(query);
+			psmt.setString(1, map.get("start").toString());
+			psmt.setString(2, map.get("end").toString());
+			rs = psmt.executeQuery();
 
 			while (rs.next()) {
 				BoardDTO dto = new BoardDTO();
@@ -165,4 +169,5 @@ public class BoardDAO extends DBConnPool {
 		
 		return result;
 	}
+	
 }
