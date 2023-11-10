@@ -9,7 +9,7 @@
         if (session.getAttribute("UserId") == null) { %>
             <a href="<%= contextPath%>/LoginForm.jsp">로그인</a>
         <% } else { %>
-            <a href="<%= contextPath%>../Logout.jsp">로그아웃</a>
+            <a href="<%= contextPath%>/Logout.jsp">로그아웃</a>
         <% } %>
             <!-- 8장과 9장의 회원제 게시판 프로젝트에서 사용할 링크 -->
             &nbsp;&nbsp;&nbsp; 
